@@ -18,6 +18,13 @@ if (!isset($_GET["action"]) || !is_string($_GET["action"])) {
 	goto out;
 }
 
+const SOCIAL_MEDIA = [
+	"facebook_id",
+	"twitter_username",
+	"discord_username",
+	"github_username",
+];
+
 function submit_attendance(): array
 {
 	if ($_SERVER["REQUEST_METHOD"] !== "POST")
@@ -39,17 +46,19 @@ function submit_attendance(): array
 	if (!isset($j["email"]) || !is_string($j["email"]))
 		return [400, err_msg(400, "Missing \"email\" string argument!")];
 
-	if (!isset($j["facebook_id"]))
-		return [400, err_msg(400, "Missing \"facebook_id\" argument!")];
+	$social_media_is_filled = false;
+	foreach (SOCIAL_MEDIA as $sc) {
+		if (!isset($j[$sc]))
+			continue;
 
-	if (!isset($j["twitter_username"]))
-		return [400, err_msg(400, "Missing \"twitter_username\" argument!")];
+		if (!is_string($j[$sc]))
+			return [400, err_msg(400, "Argument \"{$sc}\" has to be a string")];
 
-	if (!isset($j["discord_username"]))
-		return [400, err_msg(400, "Missing \"discord_username\" argument!")];
+		$social_media_is_filled = true;
+	}
 
-	if (!isset($j["github_username"]))
-		return [400, err_msg(400, "Missing \"github_username\" argument!")];
+	if (!$social_media_is_filled)
+		return [400, err_msg(400, "Social media accounts must be filled at least one")];
 
 	try {
 		$pdo = pdo();

@@ -8,6 +8,7 @@
 <body>
 	<div class="container p-5">
 		<h1 class="text-center">VNL Member Attendance Form</h1>
+		<h3 class="text-center">3th and 4th Dec 2022 (VNL Booth Senayan Park)</h3>
 		<div>
 			<form method="POST" action="javascript:void(0);" id="attendance_form">
 				<div class="mb-3">
@@ -67,6 +68,52 @@
 			success: load_select2_city
 		});
 
+		function form_err(msg)
+		{
+			alert(msg);
+		}
+
+		function form_ok()
+		{
+			alert("Terima kasih telah melakukan presensi, data Anda sudah dicatat dan dijamin aman!");
+		}
+
+		function validate_form(j)
+		{
+			if (!j.full_name.match(/^[a-z\.\'\ ]+$/i)) {
+				form_err("The full name must match with /^[a-z\\.\\'\\ ]+$/i regex pattern!");
+				return false;
+			}
+
+			if (!j.phone_number.match(/^((\+?62)|(0))\d+$/i)) {
+				form_err("The phone number must match with /^((\\+?62)|(0))\\d+$/i regex pattern!");
+				return false;
+			}
+
+			const social_media = [
+				"facebook_id",
+				"twitter_username",
+				"discord_username",
+				"github_username",
+			];
+			let social_media_is_filled = false;
+			let i;
+
+			for (i in social_media) {
+				if (j[social_media[i]] !== null) {
+					social_media_is_filled = true;
+					break;
+				}
+			}
+
+			if (!social_media_is_filled) {
+				form_err("Social media accounts must be filled at least one");
+				return false;
+			}
+
+			return true;
+		}
+
 		let form = $("#attendance_form");
 		form.submit(function () {
 			let data = form.serializeArray();
@@ -77,17 +124,33 @@
 				let key = data[i].name;
 				let val = data[i].value;
 
+				val = val.trim();
 				if (key === "city")
 					val = parseInt(val);
 
+				if (val === "")
+					val = null;
+
 				json[key] = val;
 			}
+
+			if (!validate_form(json))
+				return;
 
 			$.post({
 				url: "api.php?action=submit_attendance",
 				data: JSON.stringify(json),
 				success: function () {
-					alert("success!");
+					form_ok();
+					window.location = "";
+				},
+				error: function (res) {
+					let j = res.responseJSON;
+
+					if ("error" in j)
+						form_err(j.error);
+					else
+						form_err("Unknown error!");
 				}
 			});
 		});
