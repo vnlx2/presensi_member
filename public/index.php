@@ -6,7 +6,7 @@
 	<link rel="stylesheet" type="text/css" href="assets/css/select2.min.css"/>
 </head>
 <body>
-	<div class="container">
+	<div class="container p-5">
 		<h1 class="text-center">VNL Member Attendance Form</h1>
 		<div>
 			<form>
@@ -15,18 +15,38 @@
 					<input type="text" class="form-control" id="full_name"/>
 				</div>
 				<div class="mb-3">
-					<label for="phone_number" class="form-label">Phone Number</label>
-					<input type="text" class="form-control" id="phone_number"/>
-				</div>
-				<div class="mb-3">
 					<label for="city" class="form-label">City</label>
 					<select id="city" class="form-control"></select>
+				</div>
+				<div class="mb-3">
+					<label for="phone_number" class="form-label">Phone Number</label>
+					<input type="text" class="form-control" id="phone_number"/>
 				</div>
 				<div class="mb-3">
 					<label for="email" class="form-label">Email address</label>
 					<input type="email" class="form-control" id="email"/>
 				</div>
-				<button type="submit" class="btn btn-primary">Submit</button>
+				<div class="border container p-3 border-3 border-dark rounded-3">
+					<h4>Social Media Accounts</h4>
+					<p class="text-danger">Must be filled at least one!</p>
+					<div class="mb-3">
+						<label for="email" class="form-label">Facebook ID / Username</label>
+						<input type="email" class="form-control" id="facebook_link"/>
+					</div>
+					<div class="mb-3">
+						<label for="email" class="form-label">Twitter Username</label>
+						<input type="email" class="form-control" id="twitter_username" placeholder="@username"/>
+					</div>
+					<div class="mb-3">
+						<label for="email" class="form-label">Discord Username</label>
+						<input type="email" class="form-control" id="discord_username" placeholder="username#1234"/>
+					</div>
+					<div class="mb-3">
+						<label for="email" class="form-label">GitHub Username</label>
+						<input type="email" class="form-control" id="github_username" placeholder="@username"/>
+					</div>
+				</div>
+				<button type="submit" class="btn btn-primary mt-3">Submit</button>
 			</form>
 		</div>
 	</div>
