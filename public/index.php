@@ -11,19 +11,19 @@
 		<div>
 			<form>
 				<div class="mb-3">
-					<label for="full_name" class="form-label">Full Name</label>
+					<label for="full_name" class="form-label">Full Name <span class="text-danger">*</span></label>
 					<input type="text" class="form-control" id="full_name"/>
 				</div>
 				<div class="mb-3">
-					<label for="city" class="form-label">City</label>
+					<label for="city" class="form-label">City  <span class="text-danger">*</span></label>
 					<select id="city" class="form-control"></select>
 				</div>
 				<div class="mb-3">
-					<label for="phone_number" class="form-label">Phone Number</label>
+					<label for="phone_number" class="form-label">Phone Number  <span class="text-danger">*</span></label>
 					<input type="text" class="form-control" id="phone_number"/>
 				</div>
 				<div class="mb-3">
-					<label for="email" class="form-label">Email address</label>
+					<label for="email" class="form-label">Email address  <span class="text-danger">*</span></label>
 					<input type="email" class="form-control" id="email"/>
 				</div>
 				<div class="border container p-3 border-3 border-dark rounded-3">
