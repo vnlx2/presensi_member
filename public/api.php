@@ -2,7 +2,7 @@
 
 require __DIR__."/../helpers.php";
 
-date_default_timezone_set("UTC");
+date_default_timezone_set("Asia/Jakarta");
 
 function err_msg(int $code, string $msg): array
 {
@@ -24,6 +24,21 @@ const SOCIAL_MEDIA = [
 	"discord_username",
 	"github_username",
 ];
+
+function has_email_been_saved(PDO $pdo, string $email): bool
+{
+	$st = $pdo->prepare(<<<SQL
+		SELECT EXISTS (
+			SELECT * FROM attendances WHERE
+			email = ?
+			AND DAY(created_at) = ?
+			AND MONTH(created_at) = ?
+			AND YEAR(created_at) = ?
+		);
+	SQL);
+	$st->execute([$email, (int)date("d"), (int)date("m"), date("Y")]);
+	return (bool)(int)$st->fetch(PDO::FETCH_NUM)[0];
+}
 
 function submit_attendance(): array
 {
@@ -62,6 +77,10 @@ function submit_attendance(): array
 
 	try {
 		$pdo = pdo();
+
+		if (has_email_been_saved($pdo, $j["email"]))
+			return [400, err_msg(400, "Your data has already been recorded, please don't submit a duplicate submission!")];
+
 		$st = $pdo->prepare(<<<SQL
 			INSERT INTO `attendances`
 			(

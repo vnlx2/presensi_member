@@ -160,7 +160,7 @@
 					let j = res.responseJSON;
 
 					if ("error" in j)
-						form_err(j.error, "Server Error");
+						form_err(j.error, "Bad Request");
 					else
 						form_err("Unknown error!", "Server Error");
 				}
