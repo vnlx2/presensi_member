@@ -4,6 +4,7 @@
 	<title>VNL Member Attendance Form</title>
 	<link rel="stylesheet" type="text/css" href="assets/css/bootstrap.min.css"/>
 	<link rel="stylesheet" type="text/css" href="assets/css/select2.min.css"/>
+	<link rel="stylesheet" type="text/css" href="assets/css/sweetalert2.min.css"/>
 </head>
 <body>
 	<div class="container p-5">
@@ -13,19 +14,19 @@
 			<form method="POST" action="javascript:void(0);" id="attendance_form">
 				<div class="mb-3">
 					<label for="full_name" class="form-label">Full Name <span class="text-danger">*</span></label>
-					<input type="text" name="full_name" class="form-control" id="full_name"/>
+					<input type="text" name="full_name" class="form-control" id="full_name" required/>
 				</div>
 				<div class="mb-3">
 					<label for="city" class="form-label">City  <span class="text-danger">*</span></label>
-					<select id="city" name="city" class="form-control"></select>
+					<select id="city" name="city" class="form-control" required></select>
 				</div>
 				<div class="mb-3">
 					<label for="phone_number" class="form-label">Phone Number  <span class="text-danger">*</span></label>
-					<input type="text" name="phone_number" class="form-control" id="phone_number"/>
+					<input type="text" name="phone_number" class="form-control" id="phone_number" required/>
 				</div>
 				<div class="mb-3">
 					<label for="email" class="form-label">Email address  <span class="text-danger">*</span></label>
-					<input type="email" name="email" class="form-control" id="email"/>
+					<input type="email" name="email" class="form-control" id="email" required/>
 				</div>
 				<div class="border container p-3 border-3 border-dark rounded-3">
 					<h4>Social Media Accounts</h4>
@@ -54,6 +55,7 @@
 	<script type="text/javascript" src="assets/js/jquery-3.6.1.min.js"></script>
 	<script type="text/javascript" src="assets/js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="assets/js/select2.full.min.js"></script>
+	<script type="text/javascript" src="assets/js/sweetalert2.all.min.js"></script>
 	<script type="text/javascript">
 		function load_select2_city(data)
 		{
@@ -68,14 +70,22 @@
 			success: load_select2_city
 		});
 
-		function form_err(msg)
+		function form_err(msg, title = null)
 		{
-			alert(msg);
+			Swal.fire({
+				title: (title ? title : "Invalid Input"),
+				text: msg,
+				icon: "error"
+			});
 		}
 
-		function form_ok()
+		function form_ok(callback)
 		{
-			alert("Terima kasih telah melakukan presensi, data Anda sudah dicatat dan dijamin aman!");
+			Swal.fire({
+				title: "Submission Success!",
+				text: "Thank you for your attendance, your data has been saved!",
+				icon: "success"
+			}).then(callback);
 		}
 
 		function validate_form(j)
@@ -134,6 +144,7 @@
 				json[key] = val;
 			}
 
+			console.log(json);
 			if (!validate_form(json))
 				return;
 
@@ -141,16 +152,17 @@
 				url: "api.php?action=submit_attendance",
 				data: JSON.stringify(json),
 				success: function () {
-					form_ok();
-					window.location = "";
+					form_ok(function () {
+						window.location = "";
+					});
 				},
 				error: function (res) {
 					let j = res.responseJSON;
 
 					if ("error" in j)
-						form_err(j.error);
+						form_err(j.error, "Server Error");
 					else
-						form_err("Unknown error!");
+						form_err("Unknown error!", "Server Error");
 				}
 			});
 		});
