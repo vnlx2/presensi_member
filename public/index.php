@@ -9,7 +9,7 @@
 <body>
 	<div class="container p-5">
 		<h1 class="text-center">VNL Member Attendance Form</h1>
-		<h3 class="text-center">3th and 4th Dec 2022 (VNL Booth Senayan Park)</h3>
+		<h3 class="text-center">3rd and 4th Dec 2022 (VNL Booth Senayan Park)</h3>
 		<div>
 			<form method="POST" action="javascript:void(0);" id="attendance_form">
 				<div class="mb-3">
